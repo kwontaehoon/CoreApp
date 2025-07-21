@@ -1,8 +1,12 @@
-import { useBoardCreateMutation, useUploadImagesToBucketMutation } from "@/hooks/query";
+import {
+  useBoardCreateMutation,
+  useUploadImagesToBucketMutation,
+} from "@/hooks/query";
 import { useKeyboardHeight } from "@/hooks/useKeyboardHeight";
 import { useSessionStore } from "@/store";
 import * as ImagePicker from "expo-image-picker";
-import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { If } from "react-haiku";
 import {
   Alert,
@@ -19,17 +23,34 @@ import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function BoardWrite() {
+  const router = useRouter();
   const keyboardHeight = useKeyboardHeight();
-  const session = useSessionStore((state) => state.session)
+  const session = useSessionStore((state) => state.session);
   const [boardInfo, setBoardInfo] = useState({
     title: "",
     content: "",
   });
 
   const [images, setImages] = useState<string[]>([]);
-  const [imagesFileName, setImagesFileName] = useState([])
-  const { mutateAsync: boardCreate } = useBoardCreateMutation(boardInfo, images, imagesFileName, session);
-  const { mutateAsync: uploadImagesToBucket } = useUploadImagesToBucketMutation(images, imagesFileName)
+  const [imagesFileName, setImagesFileName] = useState([]);
+  const [validation, setValidation] = useState({
+    title: false,
+    content: false,
+  });
+  const { mutateAsync: boardCreate, isSuccess: boardCreateSuccess } =
+    useBoardCreateMutation(boardInfo, images, imagesFileName, session);
+  const {
+    mutateAsync: uploadImagesToBucket,
+    isSuccess: uploadImagesToBucketSuccess,
+  } = useUploadImagesToBucketMutation(images, imagesFileName, session);
+
+  useEffect(() => {
+    const noImages = images.length === 0;
+  
+    if (boardCreateSuccess && (noImages || uploadImagesToBucketSuccess)) {
+      router.replace("/board");
+    }
+  }, [boardCreateSuccess, uploadImagesToBucketSuccess, images]);
 
   const pickImage = async () => {
     const permissionResult =
@@ -46,9 +67,8 @@ export default function BoardWrite() {
     });
 
     if (!result.canceled) {
-      console.log(result.assets[0])
       const newImageUri = result.assets[0].uri;
-      const newImageFileName = result.assets[0].fileName
+      const newImageFileName = result.assets[0].fileName;
 
       if (images.length >= 5) {
         Alert.alert("제한", "최대 5장의 이미지만 선택할 수 있습니다.");
@@ -65,9 +85,26 @@ export default function BoardWrite() {
   };
 
   const write = async () => {
-    await boardCreate();
-    await uploadImagesToBucket();
+    let newValidation = { title: false, content: false };
+  
+    if (!boardInfo.title.trim()) newValidation.title = true;
+    if (!boardInfo.content.trim()) newValidation.content = true;
+  
+    if (newValidation.title || newValidation.content) {
+      setValidation(newValidation);
+      return;
+    }
+  
+    try {
+      await boardCreate();
+      if (images.length > 0) {
+        await uploadImagesToBucket();
+      }
+    } catch (error) {
+      Alert.alert("오류", "게시글 작성 중 문제가 발생했습니다.");
+    }
   };
+  
 
   return (
     <SafeAreaProvider>
@@ -80,11 +117,18 @@ export default function BoardWrite() {
             <Text>제목</Text>
             <TextInput
               className="border mt-2 h-12 rounded border-gray-300"
+              onFocus={() => setValidation({ ...validation, title: false })}
               onChangeText={(text) =>
                 setBoardInfo({ ...boardInfo, title: text })
               }
             ></TextInput>
           </View>
+
+          {validation.title && (
+            <View className="w-full mb-4">
+              <Text style={{ color: "red" }}>제목을 입력해주세요.</Text>
+            </View>
+          )}
 
           <View className="mb-5">
             <Text>내용</Text>
@@ -92,12 +136,19 @@ export default function BoardWrite() {
               multiline
               textAlign="left"
               textAlignVertical="top"
+              onFocus={() => setValidation({ ...validation, content: false })}
               onChangeText={(text) =>
                 setBoardInfo({ ...boardInfo, content: text })
               }
               className="border mt-2 h-[300px] rounded border-gray-300"
             ></TextInput>
           </View>
+
+          {validation.content && (
+            <View className="w-full mb-4">
+              <Text style={{ color: "red" }}>내용을 입력해주세요.</Text>
+            </View>
+          )}
 
           <View className="mb-5">
             <Text>이미지 첨부 (최대 5개)</Text>
@@ -128,7 +179,7 @@ export default function BoardWrite() {
                 showsHorizontalScrollIndicator={false}
               >
                 {images.map((uri, index) => (
-                  <View key={uri} className="relative w-40 h-40">
+                  <View key={`${uri}-${index}`} className="relative w-40 h-40">
                     <TouchableOpacity
                       activeOpacity={1}
                       onPress={() => imageDelete(index)}

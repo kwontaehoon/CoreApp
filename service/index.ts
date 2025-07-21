@@ -1,5 +1,6 @@
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
+import moment from 'moment';
 
 // test
 export const getTest = async () => {
@@ -26,8 +27,6 @@ interface User {
 
 // board details
 export const getBoardDetails = async (params: number) => {
-  console.log("id: ", params);
-
   return await supabase
     .from("boards")
     .select(
@@ -73,7 +72,7 @@ export const postBoardCreate = async (
   board: object,
   images: string[],
   imagesFileName: string[],
-  session: Session | null
+  session: Session | null,
 ) => {
   if (!session) {
     throw new Error("로그인이 필요합니다.");
@@ -91,8 +90,6 @@ export const postBoardCreate = async (
   }
 
   const userId = userData.id;
-  console.log("userId: ", userId);
-  console.log("board: ", board);
 
   // 1. boards 테이블에 게시글 등록
   const { data: boardData, error: boardError } = await supabase
@@ -114,13 +111,12 @@ export const postBoardCreate = async (
   }
 
   const boardId = boardData.id;
-  console.log("boardId: ", boardId);
 
   // 2. 이미지가 있는 경우 images 테이블에 삽입
   if (images.length > 0) {
-    const imageInserts = images.map((uri) => ({
-      url: uri,
-      // url: `${Date.now()}-${uri}`,
+    const formattedTime = moment().format('YYYYMMDD_HHmm');
+    const imageInserts = images.map((uri, i) => ({
+      url: `${formattedTime}-${session.user.id}-${imagesFileName[i]}`,
       board_id: boardId,
     }));
 

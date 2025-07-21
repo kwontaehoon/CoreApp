@@ -1,28 +1,36 @@
 import { supabase } from "@/lib/supabase";
+import moment from "moment";
 
-export const uploadMultipleImages = async (files: FileList | File[], fileName) => {
-  const uploadPromises = Array.from(files).map(async (file) => {
-    // const filePath = `${Date.now()}-${fileName}`;
-    const response = await fetch(files);
-    const blob = await response.blob();
-    const filePath = files;
-    console.log(response, blob)
+export const uploadMultipleImages = async (
+  files: FileList | File[],
+  fileName,
+  session
+) => {
+  const uploadPromises = Array.from(files).map(async (file, i) => {
+    let newFormData = new FormData();
+    const formattedTime = moment().format('YYYYMMDD_HHmm');
+    const filePath = `${formattedTime}-${session.user.id}-${fileName[i]}`;
+    const fileType = file.split(".").pop();
+
+    newFormData.append("file", {
+      uri: file,
+      name: `image.${fileType}`,
+      type: `image/${fileType}`,
+    } as any);
 
     const { data, error } = await supabase.storage
       .from("core-app")
-      .upload(filePath, file, {
+      .upload(filePath, newFormData, {
         cacheControl: "3600",
         upsert: true,
       });
-      console.log("data: ", data)
 
     if (error || !data) {
       console.error(`${file.name} 업로드 실패:`, error?.message);
       return null;
     }
 
-    console.log(456789)
-    return data
+    return data;
   });
 
   const results = await Promise.all(uploadPromises);

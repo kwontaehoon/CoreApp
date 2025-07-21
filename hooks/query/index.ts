@@ -75,10 +75,10 @@ export const useBoardCreateMutation = (board, images, imagesFileName, session) =
 };
 
 // uploadImages to bucket
-export const useUploadImagesToBucketMutation = (files: FileList | File[], fileName) => {
+export const useUploadImagesToBucketMutation = (files: FileList | File[], fileName, session) => {
     const mutationOptions = {
         mutationFn: async () => {
-            const results = await uploadMultipleImages(files, fileName);
+            const results = await uploadMultipleImages(files, fileName, session);
             return results;
         },
     };
