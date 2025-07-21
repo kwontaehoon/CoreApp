@@ -1,6 +1,6 @@
 import { supabase } from "@/utils/supabase";
 import { Session } from "@supabase/supabase-js";
-import moment from 'moment';
+import moment from "moment";
 
 // test
 export const getTest = async () => {
@@ -15,6 +15,9 @@ export const getBoard = async () => {
           name,
           email,
           created_at
+        ),
+        comments (
+          content
         )
       `);
 };
@@ -39,10 +42,18 @@ export const getBoardDetails = async (params: number) => {
     ),
     images (
       url
-    )
+    ),
+    comments (
+        id,
+        user_id,
+        content,
+        users (
+          name
+        )
+      )
   `
     )
-    .eq("id", params)
+    .eq("id", params);
 };
 
 // signup
@@ -72,7 +83,7 @@ export const postBoardCreate = async (
   board: object,
   images: string[],
   imagesFileName: string[],
-  session: Session | null,
+  session: Session | null
 ) => {
   if (!session) {
     throw new Error("로그인이 필요합니다.");
@@ -114,7 +125,7 @@ export const postBoardCreate = async (
 
   // 2. 이미지가 있는 경우 images 테이블에 삽입
   if (images.length > 0) {
-    const formattedTime = moment().format('YYYYMMDD_HHmm');
+    const formattedTime = moment().format("YYYYMMDD_HHmm");
     const imageInserts = images.map((uri, i) => ({
       url: `${formattedTime}-${session.user.id}-${imagesFileName[i]}`,
       board_id: boardId,
@@ -131,4 +142,39 @@ export const postBoardCreate = async (
   }
 
   return boardData;
+};
+
+// 댓글 입력
+export const postComment = async (board_id, content, session) => {
+  console.log(123)
+  const { data: userData, error: userError } = await supabase
+    .from("users")
+    .select("id")
+    .eq("email", session.user.email)
+    .single();
+
+  if (userError || !userData) {
+    console.error("유저 정보를 불러오지 못했습니다", userError);
+    return;
+  }
+
+  const userId = userData.id;
+
+  const { data, error } = await supabase
+    .from("comments")
+    .insert([
+      {
+        content: content,
+        board_id: board_id,
+        user_id: userId,
+      },
+    ])
+    .select();
+
+  if (error) {
+    console.error("회원가입 에러:", error);
+    throw error;
+  }
+
+  return data;
 };

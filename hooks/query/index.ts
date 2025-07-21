@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getBoard, getBoardDetails, getTest, postBoardCreate, postSignup } from "@/service";
+import { getBoard, getBoardDetails, getTest, postBoardCreate, postComment, postSignup } from "@/service";
 import { uploadMultipleImages } from "@/service/storage";
 
 
@@ -79,6 +79,17 @@ export const useUploadImagesToBucketMutation = (files: FileList | File[], fileNa
     const mutationOptions = {
         mutationFn: async () => {
             const results = await uploadMultipleImages(files, fileName, session);
+            return results;
+        },
+    };
+    return useMutation(mutationOptions);
+};
+
+//commentCreate
+export const useCommentCreateMutation = (board_id, content, session) => {
+    const mutationOptions = {
+        mutationFn: async () => {
+            const results = await postComment(board_id, content, session);
             return results;
         },
     };
