@@ -1,6 +1,32 @@
-# Welcome to your Expo app 👋
+# CoreApp Project 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+커뮤니티 Application MVP 개발
+
+## 주요 기능
+
+- 이메일과 비밀번호를 이용한 회원가입, 로그인, 로그아웃
+- 이미지 첨부가 가능한 게시글 작성
+- 게시글 목록 조회, 상세 보기, 댓글 작성
+
+## 기술 스택
+
+- React Native Expo
+- Nativewind
+- Tanstack Query
+- Zustand
+- Supabase
+   - Auth
+   - REST API
+   - Storage
+
+## 주요 사용 Library
+
+- expo-router
+- react native paper
+- expo-image-picker
+- react-native-vector-icons
+- react-native-svg
+- ...
 
 ## Get started
 
@@ -15,36 +41,3 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npx expo start
    ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
