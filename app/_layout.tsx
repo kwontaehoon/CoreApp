@@ -8,12 +8,9 @@ import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import "../global.css";
-import TT from './index'
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Text, View } from "react-native";
-import { useEffect } from "react";
 
 export default function RootLayout() {
   const queryClient = new QueryClient();

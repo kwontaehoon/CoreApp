@@ -1,16 +1,7 @@
-import Logo from "@/components/Logo";
-import { useTestQuery } from "@/hooks/query";
-import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, TextInput } from "react-native-paper";
 
-export default function LoginScreen() {
-  const router = useRouter();
-  const [text, setText] = useState("");
-
-  const { data } = useTestQuery();
+export default function KeyboardAvoding() {
 
   return (
     <KeyboardAvoidingView

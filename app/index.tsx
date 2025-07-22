@@ -8,7 +8,6 @@ import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 export default function IndexScreen() {
-  const colorScheme = useColorScheme();
   const router = useRouter();
   const setSession = useSessionStore((state) => state.setSession);
 

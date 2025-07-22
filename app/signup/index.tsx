@@ -7,7 +7,6 @@ import {
   nameValidation,
   passwordValidation,
 } from "@/utils/validation";
-import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -23,7 +22,6 @@ import { Button, TextInput as PaperTextInput } from "react-native-paper";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function App() {
-  const router = useRouter();
 
   const signupList = [
     { id: 1, title: "이메일" },

@@ -7,26 +7,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="board"
         options={{
-          headerShown: false
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'explore',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+          title: "게시글"
         }}
       />
       <Tabs.Screen
         name="logout"
         options={{
-          headerShown: false
-        }}
-      />
-      <Tabs.Screen
-        name="introduce"
-        options={{
-          headerShown: false
+          headerShown: false,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="toggle-off" color={color} />,
+          title: "로그아웃"
         }}
       />
     </Tabs>

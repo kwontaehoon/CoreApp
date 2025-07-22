@@ -1,8 +1,7 @@
 import { useBoardQuery } from "@/hooks/query";
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import moment from "moment";
@@ -12,14 +11,7 @@ export default function BoardScreen() {
 
   const { data: boardList, isLoading } = useBoardQuery()
 
-  async function signOut() {
-    const { error } = await supabase.auth.signOut()
-    if(error){
-      Alert.alert(error)
-    }
-  }
-
-  return isLoading ? '' : (
+  return isLoading ? <ActivityIndicator size={"large"} className="flex-1"/> : (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1">
         <ScrollView className="px-5 my-5">

@@ -1,7 +1,7 @@
 import { useBoardDetailsQuery, useCommentCreateMutation } from "@/hooks/query";
 import { useKeyboardHeight } from "@/hooks/useKeyboardHeight";
 import { useSessionStore } from "@/store";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
@@ -15,43 +15,54 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Feather from "react-native-vector-icons/Feather";
 
 export default function Details() {
   const keyboardHeight = useKeyboardHeight();
+  const navigation = useNavigation();
   const session = useSessionStore((state) => state.session);
-  const [comment, setComment] = useState("")
+  const [comment, setComment] = useState("");
   const { id } = useLocalSearchParams();
   const { data: boardDetailList, refetch } = useBoardDetailsQuery(id);
-  console.log("boardDetailData: ", boardDetailList)
-  const { mutateAsync: commentCreate, isSuccess: commentCreateSuccess } = useCommentCreateMutation(id, comment, session)
+  const { mutateAsync: commentCreate, isSuccess: commentCreateSuccess } =
+    useCommentCreateMutation(id, comment, session);
 
   useEffect(() => {
-    if(commentCreateSuccess){
-      refetch()
-      setComment("")
-      Keyboard.dismiss()
-    }
-  }, [commentCreateSuccess])
+    const fetchBoard = async () => {
+      if (boardDetailList && boardDetailList.length > 0) {
+        navigation.setOptions({ title: boardDetailList[0].title });
+      }
+    };
 
-  const send = async() => {
-    try {
-      await commentCreate()
-    } catch (error) {
-      Alert.alert("댓글을 다시 입력해주세요.")
+    fetchBoard();
+  }, [boardDetailList]);
+
+  useEffect(() => {
+    if (commentCreateSuccess) {
+      refetch();
+      setComment("");
+      Keyboard.dismiss();
     }
-    
-  }
+  }, [commentCreateSuccess]);
+
+  const send = async () => {
+    try {
+      await commentCreate();
+    } catch (error) {
+      Alert.alert("댓글을 다시 입력해주세요.");
+    }
+  };
 
   return !boardDetailList ? (
-    ""
+    <ActivityIndicator size={"large"} className="flex-1"/>
   ) : (
     <SafeAreaProvider>
       <SafeAreaView
         className="flex-1 bg-white"
-        style={{ paddingBottom: keyboardHeight }}
+        style={{ paddingBottom: keyboardHeight -50 }}
       >
         <KeyboardAvoidingView
           className="flex-1"

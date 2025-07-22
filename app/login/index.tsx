@@ -2,13 +2,11 @@ import Logo from "@/components/Logo";
 import { useKeyboardHeight } from "@/hooks/useKeyboardHeight";
 import { supabase } from "@/lib/supabase";
 import { useSessionStore } from "@/store";
-import { useRouter } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 
 export default function LoginScreen() {
-  const router = useRouter();
   const keyboardHeight = useKeyboardHeight();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
