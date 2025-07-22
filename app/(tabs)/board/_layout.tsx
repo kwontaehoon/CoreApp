@@ -17,7 +17,7 @@ export default function BoardLayout() {
           title: "게시글",
           headerRight: () => (
             <TouchableOpacity
-              className="rounded bg-blue-500 w-8 h-8 items-center justify-center"
+              className="rounded-lg bg-blue-500 w-8 h-8 items-center justify-center"
               onPress={() => router.push("/board/write")}
             >
               <Ionicons name="add" size={20} color={"white"} />

@@ -18,6 +18,9 @@ export const getBoard = async () => {
         ),
         comments (
           content
+        ),
+        images (
+          url
         )
       `);
 };
@@ -146,7 +149,7 @@ export const postBoardCreate = async (
 
 // 댓글 입력
 export const postComment = async (board_id, content, session) => {
-  console.log(123)
+  console.log(123);
   const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id")
@@ -177,4 +180,13 @@ export const postComment = async (board_id, content, session) => {
   }
 
   return data;
+};
+
+//
+export const getUserName = async (session) => {
+  return await supabase
+    .from("users")
+    .select("*")
+    .eq("email", session.user.email)
+    .single();
 };

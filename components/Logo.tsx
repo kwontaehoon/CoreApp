@@ -13,12 +13,12 @@ export default function Logo() {
           end={{ x: 1, y: 1 }}
           className="w-12 h-12 overflow-hidden rounded-lg flex items-center justify-center shadow-lg"
         >
-          <Text>C</Text>
+          <Text className="text-white font-bold text-xl">C</Text>
         </LinearGradient>
       </View>
-      <View className="ml-5">
+      <View className="ml-3">
         <Text className="text-3xl font-bold">CoreApp</Text>
-        <Text>Your Digital Core</Text>
+        <Text className="text-sm text-gray-500">Your Digital Core</Text>
       </View>
     </View>
   );

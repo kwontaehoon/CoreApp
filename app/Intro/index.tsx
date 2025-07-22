@@ -12,18 +12,18 @@ export default function InroScreen() {
       <Logo />
 
       <View>
-        <Text className="text-5xl">환영합니다!</Text>
+        <Text className="text-4xl font-bold">환영합니다!</Text>
       </View>
 
       <View>
-        <Text className="text-2xl">CoreApp과 함께 시작해보세요</Text>
+        <Text className="text-2xl text-gray-500">CoreApp과 함께 시작해보세요</Text>
       </View>
 
       <View className="w-full">
         <Button
           icon=""
           mode="contained"
-          style={{ borderRadius: 6 }}
+          style={{ borderRadius: 6, backgroundColor: "#3b82f6" }}
           className="mb-4"
           onPress={() => router.push("/login")}
         >
@@ -32,7 +32,8 @@ export default function InroScreen() {
         <Button
           icon=""
           mode="contained"
-          style={{ borderRadius: 6 }}
+          textColor="black"
+          style={{ borderRadius: 6, backgroundColor: "white" }}
           onPress={() => router.push("/signup")}
         >
           회원가입

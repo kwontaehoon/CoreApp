@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getBoard, getBoardDetails, getTest, postBoardCreate, postComment, postSignup } from "@/service";
+import { getBoard, getBoardDetails, getTest, getUserName, postBoardCreate, postComment, postSignup } from "@/service";
 import { uploadMultipleImages } from "@/service/storage";
 
 
@@ -9,7 +9,8 @@ const TEST_QUERY_KEY = {
 
 const COREAPP_QUERY_KEY = {
     board: ["board"],
-    boardDetails: ["board_Deatils"]
+    boardDetails: ["board_Deatils"],
+    userName: ["userName"]
 }
 
 // test
@@ -19,6 +20,19 @@ export const useTestQuery = () => {
         queryFn: async () => {
             const { data } = await getTest();
             console.log("getTest: ", data)
+            return data;
+        },
+    };
+
+    return useQuery(queryOptions);
+};
+
+// userName
+export const useUserNameQuery = (session) => {
+    const queryOptions = {
+        queryKey: COREAPP_QUERY_KEY.userName,
+        queryFn: async () => {
+            const { data } = await getUserName(session);
             return data;
         },
     };

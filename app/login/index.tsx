@@ -42,6 +42,7 @@ export default function LoginScreen() {
           <TextInput
             label="이메일을 입력하세요"
             mode="outlined"
+            activeOutlineColor="#3b82f6"
             value={email}
             onFocus={()=>setValidationError(false)}
             onChangeText={setEmail}
@@ -54,6 +55,7 @@ export default function LoginScreen() {
           <TextInput
             label="비밀번호를 입력하세요"
             mode="outlined"
+            activeOutlineColor="#3b82f6"
             value={password}
             onFocus={()=>setValidationError(false)}
             onChangeText={setPassword}
@@ -75,6 +77,7 @@ export default function LoginScreen() {
         <Button
           mode="contained"
           className="w-full rounded-lg"
+          style={{ backgroundColor: "#3b82f6" }}
           onPress={() => signInWithEmail()}
         >
           로그인

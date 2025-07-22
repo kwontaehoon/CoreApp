@@ -5,6 +5,7 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Keyboard,
@@ -15,7 +16,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  ActivityIndicator
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Feather from "react-native-vector-icons/Feather";
@@ -26,7 +26,7 @@ export default function Details() {
   const session = useSessionStore((state) => state.session);
   const [comment, setComment] = useState("");
   const { id } = useLocalSearchParams();
-  const { data: boardDetailList, refetch } = useBoardDetailsQuery(id);
+  const { data: boardDetailList, refetch, isLoading } = useBoardDetailsQuery(id);
   const { mutateAsync: commentCreate, isSuccess: commentCreateSuccess } =
     useCommentCreateMutation(id, comment, session);
 
@@ -56,35 +56,45 @@ export default function Details() {
     }
   };
 
-  return !boardDetailList ? (
-    <ActivityIndicator size={"large"} className="flex-1"/>
+  return isLoading ? (
+    <ActivityIndicator size={"large"} className="flex-1" />
   ) : (
     <SafeAreaProvider>
       <SafeAreaView
         className="flex-1 bg-white"
-        style={{ paddingBottom: keyboardHeight -50 }}
+        style={{ paddingBottom: keyboardHeight - 50 }}
       >
         <KeyboardAvoidingView
           className="flex-1"
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View className="flex-1 p-5">
-            <ScrollView className="flex-1" keyboardShouldPersistTaps="handled">
+            <ScrollView
+              className="flex-1"
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
               {/* 프로필 */}
               <View className="flex-row items-center mb-4">
-                <View className="w-12 h-12 rounded-full bg-gray-300 mr-3" />
+                <View className="w-12 h-12 rounded-full bg-blue-500 mr-3 items-center justify-center">
+                  <Text className="text-white text-xl font-bold">
+                    {boardDetailList[0].users.name.substring(0, 1)}
+                  </Text>
+                </View>
                 <View>
                   <Text className="text-base font-semibold">
                     {boardDetailList[0].users.name}
                   </Text>
                   <Text className="text-xs text-gray-500">
-                    {moment(boardDetailList[0].create_at).format("YYYY-MM-DD")}
+                    {moment(boardDetailList[0].created_at).format(
+                      "YYYY-MM-DD hh:mm"
+                    )}
                   </Text>
                 </View>
               </View>
 
               {/* 제목 + 본문 */}
-              <View className="mb-4">
+              <View className="mb-4 gap-3">
                 <Text className="text-lg font-bold mb-1">
                   {boardDetailList[0].title}
                 </Text>

@@ -25,8 +25,8 @@ export default function App() {
 
   const signupList = [
     { id: 1, title: "이메일" },
-    { id: 2, title: "비밀번호" },
-    { id: 3, title: "이름" },
+    { id: 2, title: "이름" },
+    { id: 3, title: "비밀번호" },
   ];
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -143,6 +143,8 @@ export default function App() {
             <PaperTextInput
               style={{ backgroundColor: "#f2f2f2", height: 40 }}
               mode="outlined"
+              activeOutlineColor="#3b82f6"
+              secureTextEntry={content.id === 3}
               placeholder={content.title}
               placeholderTextColor={"grey"}
               onFocus={() => setFocusedIndex(index)}
@@ -156,16 +158,16 @@ export default function App() {
                     break;
                   }
                   case 2: {
-                    setUserInfo({ ...userInfo, password: text });
-                    if (validation.password && passwordValidation(text)) {
-                      setValidation((prev) => ({ ...prev, password: "" }));
+                    setUserInfo({ ...userInfo, name: text });
+                    if (validation.name && nameValidation(text)) {
+                      setValidation((prev) => ({ ...prev, name: "" }));
                     }
                     break;
                   }
                   case 3: {
-                    setUserInfo({ ...userInfo, name: text });
-                    if (validation.name && nameValidation(text)) {
-                      setValidation((prev) => ({ ...prev, name: "" }));
+                    setUserInfo({ ...userInfo, password: text });
+                    if (validation.password && passwordValidation(text)) {
+                      setValidation((prev) => ({ ...prev, password: "" }));
                     }
                     break;
                   }
@@ -192,7 +194,7 @@ export default function App() {
         <View className="w-full flex flex-col gap-2">
           <View className="flex-row">
             <TouchableOpacity
-              className={`w-5 h-5 border mr-2 items-center justify-center ${policyCheck.terms ? "bg-blue-400" : "bg-white"}`}
+              className={`w-5 h-5 border mr-2 items-center justify-center ${policyCheck.terms ? "bg-blue-500" : "bg-white"}`}
               activeOpacity={0}
               onPress={() => {
                 setPolicyCheck({ ...policyCheck, terms: !policyCheck.terms })
@@ -213,7 +215,7 @@ export default function App() {
 
           <View className="flex-row">
             <TouchableOpacity
-              className={`w-5 h-5 border mr-2 items-center justify-center ${policyCheck.privacy ? "bg-blue-400" : "bg-white"}`}
+              className={`w-5 h-5 border mr-2 items-center justify-center ${policyCheck.privacy ? "bg-blue-500" : "bg-white"}`}
               activeOpacity={0}
               onPress={() => {
                 setPolicyCheck({
@@ -238,7 +240,7 @@ export default function App() {
 
         <Button
           mode="contained"
-          style={{ borderRadius: 6 }}
+          style={{ borderRadius: 6, backgroundColor: "#3b82f6" }}
           className="mb-4 w-full"
           onPress={test}
         >
